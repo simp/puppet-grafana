@@ -17,17 +17,17 @@ Puppet::Type.newtype(:grafana_datasource) do
 
   ensurable
 
-  newparam(:name, namevar: true) do
+  newparam(:name, :namevar => true) do
     desc 'The name of the datasource.'
   end
 
   newparam(:grafana_url) do
     desc 'The URL of the Grafana server'
-    defaultto ''
+    defaultto ""
 
     validate do |value|
-      unless value =~ %r{^https?://}
-        raise ArgumentError, format('%s is not a valid URL', value)
+      unless value =~ /^https?:\/\//
+        raise ArgumentError , "'%s' is not a valid URL" % value
       end
     end
   end
@@ -40,18 +40,27 @@ Puppet::Type.newtype(:grafana_datasource) do
     desc 'The password for the Grafana server'
   end
 
+  newparam(:organization) do
+    desc 'testing'
+  end
   newproperty(:url) do
     desc 'The URL of the datasource'
 
     validate do |value|
-      unless value =~ %r{^https?://}
-        raise ArgumentError, format('%s is not a valid URL', value)
+      unless value =~ /^https?:\/\//
+        raise ArgumentError , "'%s' is not a valid URL" % value
       end
     end
   end
 
   newproperty(:type) do
     desc 'The datasource type'
+    newvalues(:influxdb, :elasticsearch, :graphite, :kairosdb, :opentsdb, :prometheus)
+  end
+
+  newproperty(:org_name) do
+    desc 'The organization name to create the datasource on'
+    defaultto '1'
   end
 
   newproperty(:user) do
@@ -78,15 +87,38 @@ Puppet::Type.newtype(:grafana_datasource) do
     defaultto :false
   end
 
+  newproperty(:basic_auth) do
+    desc 'Whether basic auth is enabled or not'
+    newvalues(:true, :false)
+    defaultto :false
+  end
+
+  newproperty(:basic_auth_user) do
+    desc 'The username for basic auth if enabled'
+    defaultto''
+  end
+
+  newproperty(:basic_auth_password) do
+    desc 'The password for basic auth if enabled'
+    defaultto''
+  end
+
+  newproperty(:with_credentials) do
+    desc 'Whether credentials such as cookies or auth headers should be sent with cross-site requests'
+    newvalues(:true, :false)
+    defaultto :false
+  end
+
   newproperty(:json_data) do
     desc 'Additional JSON data to configure the datasource (optional)'
 
     validate do |value|
-      unless value.nil? || value.is_a?(Hash)
-        raise ArgumentError, 'json_data should be a Hash!'
+      unless value.nil? or value.is_a?(Hash) then
+        raise ArgumentError , 'json_data should be a Hash!'
       end
     end
   end
+
   autorequire(:service) do
     'grafana-server'
   end

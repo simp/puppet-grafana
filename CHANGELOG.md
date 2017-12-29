@@ -1,3 +1,11 @@
+# Releasing v3.0.1 (2017-12-29)
+
+**Enhancements**
+
+* Updated Grafana Datasource provider to allow for datasource creation on specific organizations
+* Updated README to fix presentation as well as update/add information
+* Improved syntax/phrasing in code and docs
+
 # Releasing v3.0.0 (2017-03-29)
 
 **Implemented enhancements:**

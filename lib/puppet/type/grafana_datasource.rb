@@ -80,12 +80,12 @@ Puppet::Type.newtype(:grafana_datasource) do
 
   newproperty(:basic_auth_user) do
     desc 'The username for basic auth if enabled'
-    defaultto''
+    defaultto ''
   end
 
   newproperty(:basic_auth_password) do
     desc 'The password for basic auth if enabled'
-    defaultto''
+    defaultto ''
   end
 
   newproperty(:with_credentials) do

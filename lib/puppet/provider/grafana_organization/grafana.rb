@@ -1,17 +1,3 @@
-#    Copyright 2015 Mirantis, Inc.
-#
-#    Licensed under the Apache License, Version 2.0 (the "License"); you may
-#    not use this file except in compliance with the License. You may obtain
-#    a copy of the License at
-#
-#         http://www.apache.org/licenses/LICENSE-2.0
-#
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-#    License for the specific language governing permissions and limitations
-#    under the License.
-#
 require 'json'
 
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'grafana'))
@@ -43,7 +29,6 @@ Puppet::Type.type(:grafana_organization).provide(:grafana, parent: Puppet::Provi
           name: organization['name'],
           address: organization['address']
         }
-      
       end
     rescue JSON::ParserError
       raise format('Failed to parse response: %s', response.body)
@@ -56,7 +41,7 @@ Puppet::Type.type(:grafana_organization).provide(:grafana, parent: Puppet::Provi
     end
     @organization
   end
-  
+
   attr_writer :organization
 
   # rubocop:enable Style/PredicateName
@@ -83,12 +68,10 @@ Puppet::Type.type(:grafana_organization).provide(:grafana, parent: Puppet::Provi
     data = {
       id: resource[:id],
       name: resource[:name],
-      address: resource[:address],
+      address: resource[:address]
     }
-    
-    if organization.nil?
-      response = send_request('POST', '/api/orgs', data)
-    end
+
+    response = send_request('POST', '/api/orgs', data) if organization.nil?
 
     if response.code != '200'
       raise format('Failed to create save %s (HTTP response: %s/%s)', resource[:name], response.code, response.body)

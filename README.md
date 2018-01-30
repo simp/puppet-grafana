@@ -342,7 +342,7 @@ The module includes several custom types:
 
 #### `grafana_organization`
 
-In order to use the organization resource, add the followingto your manifest:
+In order to use the organization resource, add the following to your manifest:
 
 ```puppet
 grafana_organization { 'example_org':
